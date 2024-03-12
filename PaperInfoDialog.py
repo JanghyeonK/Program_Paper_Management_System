@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import *
+import os
 class PaperInfoDialog(QDialog):
     def __init__(self, paper_info, parent=None):
         super().__init__(parent)
@@ -42,12 +43,15 @@ class PaperInfoDialog(QDialog):
         self.comment_label = QLabel("Comment:")
         self.comment_input = QTextEdit(paper_info.get("comment", ""))
 
+        # Get current path
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+
         self.pdf_path_label = QLabel("PDF Path:")
-        self.pdf_path_text = QLineEdit(paper_info.get("pdf_path", ""))
+        self.pdf_path_text = QLineEdit(current_dir + "\\" + paper_info.get("pdf_path", ""))
         self.pdf_path_text.setReadOnly(True)
 
         self.bib_path_label = QLabel("BibTeX Path:")
-        self.bib_path_text = QLineEdit(paper_info.get("bib_path", ""))
+        self.bib_path_text = QLineEdit(current_dir + "\\" + paper_info.get("bib_path", ""))
         self.bib_path_text.setReadOnly(True)
 
         self.modify_button = QPushButton("Modify")

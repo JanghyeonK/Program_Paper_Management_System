@@ -25,7 +25,6 @@ class PaperManagementApp(QMainWindow):
         self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
         self.table_widget.doubleClicked.connect(self.display_paper_info)
 
-
         self.search_input = QLineEdit()
         self.search_input.setPlaceholderText("Search by title, author, or keyword...")
         self.search_input.textChanged.connect(self.search_papers)

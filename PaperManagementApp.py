@@ -1,6 +1,7 @@
 import csv
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import Qt, QSettings
+from PyQt5.QtGui import QIcon
 from PaperInfoDialog import PaperInfoDialog
 from AddPaperDialog import AddPaperDialog
 
@@ -8,6 +9,7 @@ class PaperManagementApp(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Paper Management System")
+        self.setWindowIcon(QIcon('icon.png'))  # 아이콘 파일의 경로를 전달하여 아이콘 설정
         self.setGeometry(200, 200, 1200, 600)
         self.setMinimumSize(1200, 600)
 
@@ -184,7 +186,7 @@ class PaperManagementApp(QMainWindow):
     def save_to_csv(self):
         with open('paper_database.csv', 'w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
-            writer.writerow(["Title", "Authors", "Keywords", "Year", "Conference", "Journal", "Read", "Path_pdf", "Path_bib"])
+            writer.writerow(["Title", "Authors", "Keywords", "Year", "Conference", "Journal", "Read", "Comment", "Path_pdf", "Path_bib"])
             for paper in self.paper_database:
                 writer.writerow([
                     paper.get("title", ""),
@@ -194,6 +196,7 @@ class PaperManagementApp(QMainWindow):
                     paper.get("conference", ""),
                     paper.get("journal", ""),
                     "Yes" if paper.get("read", False) else "No",
+                    paper.get("comment", ""),
                     paper.get("pdf_path", ""),
                     paper.get("bib_path", ""),
                 ])
@@ -212,6 +215,7 @@ class PaperManagementApp(QMainWindow):
                         "conference": row["Conference"],
                         "journal": row["Journal"],
                         "read": True if row["Read"] == "Yes" else False,
+                        "comment": row["Comment"],
                         "pdf_path": row["Path_pdf"],
                         "bib_path": row["Path_bib"]
                     })

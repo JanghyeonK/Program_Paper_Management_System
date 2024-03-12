@@ -103,9 +103,12 @@ class AddPaperDialog(QDialog):
             self.pdf_input.setText(pdf_relative_path)
 
     def is_duplicate_title(self, title):
-        for paper in self.parent().paper_database:
-            if paper["title"] == title:
-                return True
+        try:
+            for paper in self.parent().paper_database:
+                if paper["title"] == title:
+                    return True
+        except:
+            pass
         return False
 
     def add_paper(self):
@@ -115,7 +118,7 @@ class AddPaperDialog(QDialog):
         year = self.year_input.text()
         conference = self.conference_input.text()
         journal = self.journal_input.text()
-        comment = self.comment_input.text()
+        comment = self.comment_input.toPlainText()
         read = True if self.read_combobox.currentText() == "Yes" else False
         path_pdf = self.pdf_input.text()
         path_bib = self.bib_input.text()

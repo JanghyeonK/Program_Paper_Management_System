@@ -1,0 +1,2 @@
+conda activate paper_manage
+pyinstaller --onefile --noconsole main.py

@@ -20,7 +20,7 @@ class PaperManagementApp(QMainWindow):
 
         self.table_widget = QTableWidget()
         self.table_widget.setColumnCount(9)
-        self.table_widget.setHorizontalHeaderLabels(["Title", "Authors", "Keywords", "Read", "PDF", "bib", "Year", "Conference", "Journal"])
+        self.table_widget.setHorizontalHeaderLabels(["Title", "Authors", "Keywords", "Read", "PDF", "bib", "Year", "Conf.", "Journal"])
         self.table_widget.setFixedWidth(self.width() - 40)
         self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.table_widget.setSelectionBehavior(QAbstractItemView.SelectRows)

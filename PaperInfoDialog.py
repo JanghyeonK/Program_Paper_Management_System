@@ -1,5 +1,7 @@
 from PyQt5.QtWidgets import *
 import os
+import bibtexparser
+
 class PaperInfoDialog(QDialog):
     def __init__(self, paper_info, parent=None):
         super().__init__(parent)
@@ -11,7 +13,7 @@ class PaperInfoDialog(QDialog):
         self.move(x, y)
 
         # 글자 크기 크게하는 스타일 시트 생성
-        font_size = "14pt"  # 원하는 글자 크기
+        font_size = "13pt"  # 원하는 글자 크기
         self.setStyleSheet(f"font-size: {font_size};")
 
         self.paper_info = paper_info
@@ -44,18 +46,25 @@ class PaperInfoDialog(QDialog):
         self.comment_input = QTextEdit(paper_info.get("comment", ""))
 
         # Get current path
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-
-        self.pdf_path_label = QLabel("PDF Path:")
-        self.pdf_path_text = QLineEdit(current_dir + "\\" + paper_info.get("pdf_path", ""))
+        self.pdf_path_label = QLabel("Path pdf:")
+        self.pdf_path_text = QLineEdit(paper_info.get("pdf_path", ""))
         self.pdf_path_text.setReadOnly(True)
 
-        self.bib_path_label = QLabel("BibTeX Path:")
-        self.bib_path_text = QLineEdit(current_dir + "\\" + paper_info.get("bib_path", ""))
+        self.bib_path_label = QLabel("Path bib:")
+        self.bib_path_text = QLineEdit(paper_info.get("bib_path", ""))
         self.bib_path_text.setReadOnly(True)
+
+        # PDF 파일 추가 버튼
+        self.add_pdf_button = QPushButton("Add PDF")
+        self.add_pdf_button.clicked.connect(self.add_pdf_button_clicked)
+
+        # Bib 파일 추가 버튼
+        self.add_bib_button = QPushButton("Add Bib")
+        self.add_bib_button.clicked.connect(self.add_bib_button_clicked)
 
         self.modify_button = QPushButton("Modify")
         self.modify_button.clicked.connect(self.modify_paper)
+
 
         layout = QVBoxLayout()
         form_layout = QFormLayout()
@@ -72,10 +81,11 @@ class PaperInfoDialog(QDialog):
         layout.addWidget(self.pdf_path_text)
         layout.addWidget(self.bib_path_label)
         layout.addWidget(self.bib_path_text)
+        layout.addWidget(self.add_pdf_button)
+        layout.addWidget(self.add_bib_button)
         layout.addWidget(self.modify_button)
 
         self.setLayout(layout)
-
     def modify_paper(self):
         title = self.title_input.text()
         authors = self.author_input.text()
@@ -85,6 +95,8 @@ class PaperInfoDialog(QDialog):
         journal = self.journal_input.text()
         read = True if self.read_combobox.currentText() == "Yes" else False
         comment = self.comment_input.toPlainText()
+        path_pdf = self.pdf_path_text.text()
+        path_bib = self.bib_path_text.text()
 
         self.paper_info["title"] = title
         self.paper_info["author"] = authors
@@ -94,7 +106,46 @@ class PaperInfoDialog(QDialog):
         self.paper_info["journal"] = journal
         self.paper_info["read"] = read
         self.paper_info["comment"] = comment
+        self.paper_info["pdf_path"] = path_pdf
+        self.paper_info["bib_path"] = path_bib
 
         self.parent().update_table()  # 수정 후 테이블 업데이트
 
         self.accept()
+
+    def add_pdf_button_clicked(self):
+        # PDF 파일 선택 다이얼로그 열기
+        file_dialog = QFileDialog(self)
+        file_dialog.setFileMode(QFileDialog.ExistingFile)
+        file_dialog.setNameFilter("PDF (*.pdf)")
+        file_dialog.setViewMode(QFileDialog.Detail)
+        try:
+            if file_dialog.exec_():
+                file_path = file_dialog.selectedFiles()[0]
+                file_name = os.path.basename(file_path)
+                self.pdf_path_text.setText(file_name)
+        except:
+            pass
+
+    def add_bib_button_clicked(self):
+        # Bib 파일 선택 다이얼로그 열기
+        file_dialog = QFileDialog(self)
+        file_dialog.setFileMode(QFileDialog.ExistingFile)
+        file_dialog.setNameFilter("BibTeX (*.bib)")
+        file_dialog.setViewMode(QFileDialog.Detail)
+        if file_dialog.exec_():
+            file_path = file_dialog.selectedFiles()[0]
+            file_name = os.path.basename(file_path)
+            self.bib_path_text.setText(file_name)
+
+            # BibTeX 파일 내용 읽기
+            with open(file_path, 'r') as bibtex_file:
+                bib_database = bibtexparser.load(bibtex_file)
+                if bib_database.entries:
+                    entry = bib_database.entries[0]
+                    self.title_input.setText(entry.get("title", ""))
+                    self.author_input.setText(entry.get("author", ""))
+                    self.keywords_input.setText(entry.get("keywords", ""))
+                    self.year_input.setText(entry.get("year", ""))
+                    self.conference_input.setText(entry.get("conference", ""))
+                    self.journal_input.setText(entry.get("journal", ""))

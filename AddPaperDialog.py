@@ -12,7 +12,7 @@ class AddPaperDialog(QDialog):
         self.move(x, y)
 
         # 글자 크기 크게하는 스타일 시트 생성
-        font_size = "14pt"  # 원하는 글자 크기
+        font_size = "13pt"  # 원하는 글자 크기
         self.setStyleSheet(f"font-size: {font_size};")
 
         self.title_label = QLabel("Title:")
@@ -49,7 +49,7 @@ class AddPaperDialog(QDialog):
         self.pdf_input.setReadOnly(True)
 
         self.pdf_button = QPushButton("PDF Browse")
-        self.pdf_button.clicked.connect(self.browse_pdf)
+        self.pdf_button.clicked.connect(self.import_pdf)
 
         self.bib_button = QPushButton("Import from BibTeX")
         self.bib_button.clicked.connect(self.import_from_bibtex)
@@ -80,9 +80,8 @@ class AddPaperDialog(QDialog):
         file_dialog = QFileDialog()
         file_path, _ = file_dialog.getOpenFileName(self, "Import from BibTeX", "", "BibTeX Files (*.bib)")
         if file_path:
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-            bib_relative_path = os.path.relpath(file_path, current_dir)
-            self.bib_input.setText(bib_relative_path)
+            file_name = os.path.basename(file_path)
+            self.bib_input.setText(file_name)
             with open(file_path, 'r') as bibtex_file:
                 bib_database = bibtexparser.load(bibtex_file)
                 if bib_database.entries:
@@ -94,13 +93,12 @@ class AddPaperDialog(QDialog):
                     self.conference_input.setText(entry.get("conference", ""))
                     self.journal_input.setText(entry.get("journal", ""))
 
-    def browse_pdf(self):
+    def import_pdf(self):
         file_dialog = QFileDialog()
         file_path, _ = file_dialog.getOpenFileName(self, "Select PDF File", "", "PDF Files (*.pdf)")
         if file_path:
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-            pdf_relative_path = os.path.relpath(file_path, current_dir)
-            self.pdf_input.setText(pdf_relative_path)
+            file_name = os.path.basename(file_path)
+            self.pdf_input.setText(file_name)
 
     def is_duplicate_title(self, title):
         try:

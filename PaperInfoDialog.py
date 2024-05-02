@@ -30,7 +30,7 @@ class PaperInfoDialog(QDialog):
         self.author_input = QLineEdit(paper_info.get("author", ""))
 
         self.keywords_label = QLabel("Keywords:")
-        self.keywords_input = QLineEdit()
+        self.keywords_input = QLineEdit(paper_info.get("keywords", ""))
         self.keywords_input.textChanged.connect(self.show_keyword_suggestions)  # 키워드 추천 표시
 
         self.suggestion_list = QListWidget()

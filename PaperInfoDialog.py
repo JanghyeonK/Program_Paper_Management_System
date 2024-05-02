@@ -155,8 +155,8 @@ class PaperInfoDialog(QDialog):
 
     def show_keyword_suggestions(self):
         text = self.keywords_input.text().strip()
-        last_word = text.split(",")[-1].strip()
-        suggestions = [keyword for keyword in self.existing_keywords if keyword.startswith(last_word)]
+        last_word = text.split(",")[-1].strip().lower()
+        suggestions = [keyword for keyword in self.existing_keywords if keyword.lower().startswith(last_word)]
         suggestions.sort()
         self.suggestion_list.clear()
         if suggestions:

@@ -15,8 +15,8 @@ class PaperManagementApp(QMainWindow):
         super().__init__()
         self.setWindowTitle("Paper Management System")
         self.setWindowIcon(QIcon('icon.png'))  # 아이콘 파일의 경로를 전달하여 아이콘 설정
-        self.setGeometry(200, 200, 2100, 600)
-        self.setMinimumSize(1200, 600)
+        self.setGeometry(200, 200, 2100, 800)
+        self.setMinimumSize(1200, 800)
 
         # 글자 크기 크게하는 스타일 시트 생성
         font_size = "13pt"  # 원하는 글자 크기
@@ -41,12 +41,6 @@ class PaperManagementApp(QMainWindow):
         self.delete_button = QPushButton("Delete Paper")
         self.delete_button.clicked.connect(self.delete_paper)
 
-        # self.save_button = QPushButton("Save")
-        # self.save_button.clicked.connect(self.save_to_csv)
-
-        # self.load_button = QPushButton("Load")
-        # self.load_button.clicked.connect(self.load_from_csv)
-
         self.add_button = QPushButton("Add Paper")
         self.add_button.clicked.connect(self.add_paper_dialog)
 
@@ -57,16 +51,13 @@ class PaperManagementApp(QMainWindow):
         button_layout = QHBoxLayout()
         button_layout.addWidget(self.add_button)
         button_layout.addWidget(self.delete_button)
-        # button_layout.addWidget(self.save_button)
-        # button_layout.addWidget(self.load_button)
         button_layout.setContentsMargins(10, 10, 10, 10)  # 여백 조정
         # 버튼 간 간격 조정
         button_layout.setSpacing(10)
         # 각 버튼의 크기 정책 설정
         self.add_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.delete_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        # self.save_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        # self.load_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+
 
         # Main 레이아웃
         layout = QVBoxLayout()
@@ -177,6 +168,12 @@ class PaperManagementApp(QMainWindow):
             self.table_widget.setItem(row, 5, read_item)
             self.table_widget.setItem(row, 6, path_pdf_item)
             self.table_widget.setItem(row, 7, path_bib_item)
+
+            # 표의 모든 셀에 있는 텍스트를 좌측 정렬로 설정하는 경우:
+            for row in range(self.table_widget.rowCount()):
+                item = self.table_widget.item(row, 0)
+                if item:
+                    item.setTextAlignment(Qt.AlignLeft)
             
             # 자동완성 기능을 위한 Completer 설정
             completer = QCompleter(self.get_search_suggestions())

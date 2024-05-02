@@ -1,0 +1,4 @@
+Title,Authors,Keywords,Year,Publication,Read,Comment,Path_pdf,Path_bib
+Attention is all you need,"VaswaniAshish, ShazeerNoam, ParmarNiki, UszkoreitJakob, JonesLlion, GomezAidanN, KaiserLukasz, PolosukhinIllia",aaa,2017,Advances in neural information processing systems,X,,,attension.bib
+Progress and prospects of the human--robot collaborationbb,"AjoudaniArash, ZanchettinAndreaMaria, IvaldiSerena, Albu-SchafferAlin, KosugeKazuhiro, KhatibOussama",bbb,2018,Autonomous Robots,X,,Proximal Policy Optimization Algorithms.pdf,HRC_review.bib
+Proximal policy optimization algorithmsa,"SchulmanJohn, WolskiFilip, DhariwalPrafulla, RadfordAlec, KlimovOleg","aaa, bbb, aaa",2017,arXiv preprint arXiv:1707.06347,X,,,PPO.bib

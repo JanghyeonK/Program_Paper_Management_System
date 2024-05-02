@@ -1,12 +1,16 @@
-('C:\\Users\\Kim\\Desktop\\Paper_Management_System\\src\\Paper_Management_System\\build\\main\\PYZ-00.pyz',
+('D:\\Research\\Paper Management '
+ 'System\\src\\Paper_Management_System\\build\\main\\PYZ-00.pyz',
  [('AddPaperDialog',
-   'C:\\Users\\Kim\\Desktop\\Paper_Management_System\\src\\Paper_Management_System\\AddPaperDialog.py',
+   'D:\\Research\\Paper Management '
+   'System\\src\\Paper_Management_System\\AddPaperDialog.py',
    'PYMODULE'),
   ('PaperInfoDialog',
-   'C:\\Users\\Kim\\Desktop\\Paper_Management_System\\src\\Paper_Management_System\\PaperInfoDialog.py',
+   'D:\\Research\\Paper Management '
+   'System\\src\\Paper_Management_System\\PaperInfoDialog.py',
    'PYMODULE'),
   ('PaperManagementApp',
-   'C:\\Users\\Kim\\Desktop\\Paper_Management_System\\src\\Paper_Management_System\\PaperManagementApp.py',
+   'D:\\Research\\Paper Management '
+   'System\\src\\Paper_Management_System\\PaperManagementApp.py',
    'PYMODULE'),
   ('PyQt5',
    'C:\\Users\\Kim\\.conda\\envs\\paper_manage\\lib\\site-packages\\PyQt5\\__init__.py',

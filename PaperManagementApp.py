@@ -2,6 +2,10 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
 import csv
+import shutil
+import os
+from datetime import datetime
+
 from PaperInfoDialog import PaperInfoDialog
 from AddPaperDialog import AddPaperDialog
 
@@ -11,7 +15,7 @@ class PaperManagementApp(QMainWindow):
         super().__init__()
         self.setWindowTitle("Paper Management System")
         self.setWindowIcon(QIcon('icon.png'))  # 아이콘 파일의 경로를 전달하여 아이콘 설정
-        self.setGeometry(200, 200, 1200, 600)
+        self.setGeometry(200, 200, 2100, 600)
         self.setMinimumSize(1200, 600)
 
         # 글자 크기 크게하는 스타일 시트 생성
@@ -19,8 +23,8 @@ class PaperManagementApp(QMainWindow):
         self.setStyleSheet(f"font-size: {font_size};")
 
         self.table_widget = QTableWidget()
-        self.table_widget.setColumnCount(9)
-        self.table_widget.setHorizontalHeaderLabels(["Title", "Authors", "Keywords", "Read", "PDF", "bib", "Year", "Conf.", "Journal"])
+        self.table_widget.setColumnCount(8)
+        self.table_widget.setHorizontalHeaderLabels(["Title", "Authors", "Keywords", "Publication", "Year", "Read", "PDF", "bib"])
         self.table_widget.setFixedWidth(self.width() - 40)
         self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.table_widget.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -28,7 +32,7 @@ class PaperManagementApp(QMainWindow):
         self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
 
         self.search_input = QLineEdit()
-        self.search_input.setPlaceholderText("Search by title, author, or keyword...")
+        self.search_input.setPlaceholderText("Search by title, author, keyword, publication ...")
         self.search_input.textChanged.connect(self.search_papers)
 
         self.add_button = QPushButton("Add Paper")
@@ -37,11 +41,11 @@ class PaperManagementApp(QMainWindow):
         self.delete_button = QPushButton("Delete Paper")
         self.delete_button.clicked.connect(self.delete_paper)
 
-        self.save_button = QPushButton("Save")
-        self.save_button.clicked.connect(self.save_to_csv)
+        # self.save_button = QPushButton("Save")
+        # self.save_button.clicked.connect(self.save_to_csv)
 
-        self.load_button = QPushButton("Load")
-        self.load_button.clicked.connect(self.load_from_csv)
+        # self.load_button = QPushButton("Load")
+        # self.load_button.clicked.connect(self.load_from_csv)
 
         self.add_button = QPushButton("Add Paper")
         self.add_button.clicked.connect(self.add_paper_dialog)
@@ -53,16 +57,16 @@ class PaperManagementApp(QMainWindow):
         button_layout = QHBoxLayout()
         button_layout.addWidget(self.add_button)
         button_layout.addWidget(self.delete_button)
-        button_layout.addWidget(self.save_button)
-        button_layout.addWidget(self.load_button)
+        # button_layout.addWidget(self.save_button)
+        # button_layout.addWidget(self.load_button)
         button_layout.setContentsMargins(10, 10, 10, 10)  # 여백 조정
         # 버튼 간 간격 조정
         button_layout.setSpacing(10)
         # 각 버튼의 크기 정책 설정
         self.add_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.delete_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        self.save_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        self.load_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        # self.save_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        # self.load_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
         # Main 레이아웃
         layout = QVBoxLayout()
@@ -106,14 +110,14 @@ class PaperManagementApp(QMainWindow):
         self.adjust_table_column_widths()
 
     def adjust_table_column_widths(self):
-        self.table_widget.setFixedWidth(self.width()-30)
-        total_width = self.table_widget.width() - 40  # 여백을 고려하여 총 너비 계산
+        self.table_widget.setFixedWidth(self.width() - 40)
+        total_width = self.table_widget.width() - 90  # 여백을 고려하여 총 너비 계산
         column_count = self.table_widget.columnCount()
 
-        # (["Title", "Authors", "Keywords", "Read", "PDF", "bib", "Year", "Conf.", "Journal"])
+        # (["Title", "Authors", "Keywords", "Publication", "Year", "Read", "PDF", "bib"])
         # initialization
         if self.init_table :
-            init_width = [300, 150, 150, 50, 50, 50, 50, 50, 50]
+            init_width = [300, 150, 150, 200, 50, 50, 50, 50]
             for column in range(column_count):
                 # 각 열의 비율 계산
                 column_width = init_width[column]
@@ -138,6 +142,7 @@ class PaperManagementApp(QMainWindow):
 
     def update_table(self):
         self.table_widget.setRowCount(len(self.paper_database))
+        self.paper_database = sorted(self.paper_database, key=lambda x: x["title"])
         for row, paper in enumerate(self.paper_database):
             title_item = QTableWidgetItem(paper.get("title", ""))
             title_item.setTextAlignment(Qt.AlignCenter)
@@ -151,42 +156,39 @@ class PaperManagementApp(QMainWindow):
             year_item = QTableWidgetItem(paper.get("year", ""))
             year_item.setTextAlignment(Qt.AlignCenter)
 
-            conference_item = QTableWidgetItem(paper.get("conference", ""))
-            conference_item.setTextAlignment(Qt.AlignCenter)
+            publication_item = QTableWidgetItem(paper.get("publication", ""))
+            publication_item.setTextAlignment(Qt.AlignCenter)
 
-            journal_item = QTableWidgetItem(paper.get("journal", ""))
-            journal_item.setTextAlignment(Qt.AlignCenter)
-
-            read_item = QTableWidgetItem("Yes" if paper.get("read", False) else "No")
+            read_item = QTableWidgetItem("O" if paper.get("read", True) else "X")
             read_item.setTextAlignment(Qt.AlignCenter)
 
-            path_pdf_item = QTableWidgetItem("No" if not paper.get("pdf_path", "") else "Yes")
+            path_pdf_item = QTableWidgetItem("X" if not paper.get("pdf_path", "") else "O")
             path_pdf_item.setTextAlignment(Qt.AlignCenter)
 
-            path_bib_item = QTableWidgetItem("No" if not paper.get("bib_path", "") else "Yes")
+            path_bib_item = QTableWidgetItem("X" if not paper.get("bib_path", "") else "O")
             path_bib_item.setTextAlignment(Qt.AlignCenter)
 
-            # (["Title", "Authors", "Keywords", "Read", "PDF", "bib", "Year", "Conference", "Journal"])
+            # (["Title", "Authors", "Keywords", "Publication", "Year", "Read", "PDF", "bib"])
             self.table_widget.setItem(row, 0, title_item)
             self.table_widget.setItem(row, 1, authors_item)
             self.table_widget.setItem(row, 2, keywords_item)
-            self.table_widget.setItem(row, 3, read_item)
-            self.table_widget.setItem(row, 4, path_pdf_item)
-            self.table_widget.setItem(row, 5, path_bib_item)
-            self.table_widget.setItem(row, 6, year_item)
-            self.table_widget.setItem(row, 7, conference_item)
-            self.table_widget.setItem(row, 8, journal_item)
-
-
+            self.table_widget.setItem(row, 3, publication_item)
+            self.table_widget.setItem(row, 4, year_item)
+            self.table_widget.setItem(row, 5, read_item)
+            self.table_widget.setItem(row, 6, path_pdf_item)
+            self.table_widget.setItem(row, 7, path_bib_item)
+            
             # 자동완성 기능을 위한 Completer 설정
             completer = QCompleter(self.get_search_suggestions())
             completer.setCaseSensitivity(Qt.CaseInsensitive)  # 대소문자 구분 없이 검색
             self.search_input.setCompleter(completer)
 
+
     def add_paper_dialog(self):
         dialog = AddPaperDialog(self)
         if dialog.exec_() == QDialog.Accepted:
             self.update_table()
+            
 
     def delete_paper(self):
         selected_rows = self.table_widget.selectionModel().selectedRows()
@@ -196,10 +198,12 @@ class PaperManagementApp(QMainWindow):
             for row_index in row_indices:
                 del self.paper_database[row_index]
             self.update_table()
+            self.save_to_csv()
 
     def add_paper_to_list(self, paper_info):
         self.paper_database.append(paper_info)
         self.update_table()
+        self.save_to_csv()
 
     def search_papers(self):
         search_text = self.search_input.text().lower()
@@ -241,22 +245,39 @@ class PaperManagementApp(QMainWindow):
 
 
     def save_to_csv(self):
+        self.paper_database = sorted(self.paper_database, key=lambda x: x["title"])
         with open('paper_database.csv', 'w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
-            writer.writerow(["Title", "Authors", "Keywords", "Year", "Conference", "Journal", "Read", "Comment", "Path_pdf", "Path_bib"])
+            writer.writerow(["Title", "Authors", "Keywords", "Year", "Publication", "Read", "Comment", "Path_pdf", "Path_bib"])
             for paper in self.paper_database:
                 writer.writerow([
                     paper.get("title", ""),
                     paper.get("author", ""),
                     paper.get("keywords", ""),
                     paper.get("year", ""),
-                    paper.get("conference", ""),
-                    paper.get("journal", ""),
-                    "Yes" if paper.get("read", False) else "No",
+                    paper.get("publication", ""),
+                    "O" if paper.get("read", True) else "X",
                     paper.get("comment", ""),
                     paper.get("pdf_path", ""),
                     paper.get("bib_path", ""),
                 ])
+        
+        backup_folder = 'backup_csv'
+        os.makedirs(backup_folder, exist_ok=True)
+
+        # 원본 파일 경로
+        source_file = 'paper_database.csv'
+
+        # 현재 날짜를 이용하여 백업 파일 이름 생성
+        current_date = datetime.now().strftime("%Y-%m-%d")
+        backup_file_name = f'paper_database_{current_date}.csv'
+
+        # 백업 파일 경로
+        backup_file = os.path.join(backup_folder, backup_file_name)
+
+        # 파일 복사
+        shutil.copyfile(source_file, backup_file)
+
 
     def load_from_csv(self):
         self.paper_database = []
@@ -269,13 +290,14 @@ class PaperManagementApp(QMainWindow):
                         "author": row["Authors"],
                         "keywords": row["Keywords"],
                         "year": row["Year"],
-                        "conference": row["Conference"],
-                        "journal": row["Journal"],
-                        "read": True if row["Read"] == "Yes" else False,
+                        "publication": row["Publication"],
+                        "read": True if (row["Read"] == "O" or row["Read"] == "Yes") else False,
                         "comment": row["Comment"],
                         "pdf_path": row["Path_pdf"],
                         "bib_path": row["Path_bib"]
                     })
         except FileNotFoundError:
             pass
+
+        self.paper_database = sorted(self.paper_database, key=lambda x: x["title"])
         self.update_table()

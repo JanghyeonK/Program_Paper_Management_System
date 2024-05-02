@@ -15,7 +15,7 @@
 
 <div class="node">
   <a name="main.py"></a>
-  <a target="code" href="///C:/Users/Kim/Desktop/Paper_Management_System/src/Paper_Management_System/main.py" type="text/plain"><tt>main.py</tt></a>
+  <a target="code" href="///D:/Research/Paper%20Management%20System/src/Paper_Management_System/main.py" type="text/plain"><tt>main.py</tt></a>
 <span class="moduletype">Script</span>  <div class="import">
 imports:
     <a href="#PaperManagementApp">PaperManagementApp</a>
@@ -263,12 +263,15 @@ imported by:
 
 <div class="node">
   <a name="AddPaperDialog"></a>
-  <a target="code" href="///C:/Users/Kim/Desktop/Paper_Management_System/src/Paper_Management_System/AddPaperDialog.py" type="text/plain"><tt>AddPaperDialog</tt></a>
+  <a target="code" href="///D:/Research/Paper%20Management%20System/src/Paper_Management_System/AddPaperDialog.py" type="text/plain"><tt>AddPaperDialog</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
-    <a href="#PyQt5.QtWidgets">PyQt5.QtWidgets</a>
+    <a href="#PyQt5.QtCore">PyQt5.QtCore</a>
+ &#8226;   <a href="#PyQt5.QtGui">PyQt5.QtGui</a>
+ &#8226;   <a href="#PyQt5.QtWidgets">PyQt5.QtWidgets</a>
  &#8226;   <a href="#bibtexparser">bibtexparser</a>
  &#8226;   <a href="#os">os</a>
+ &#8226;   <a href="#re">re</a>
 
   </div>
   <div class="import">
@@ -281,12 +284,15 @@ imported by:
 
 <div class="node">
   <a name="PaperInfoDialog"></a>
-  <a target="code" href="///C:/Users/Kim/Desktop/Paper_Management_System/src/Paper_Management_System/PaperInfoDialog.py" type="text/plain"><tt>PaperInfoDialog</tt></a>
+  <a target="code" href="///D:/Research/Paper%20Management%20System/src/Paper_Management_System/PaperInfoDialog.py" type="text/plain"><tt>PaperInfoDialog</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
-    <a href="#PyQt5.QtWidgets">PyQt5.QtWidgets</a>
+    <a href="#PyQt5.QtCore">PyQt5.QtCore</a>
+ &#8226;   <a href="#PyQt5.QtGui">PyQt5.QtGui</a>
+ &#8226;   <a href="#PyQt5.QtWidgets">PyQt5.QtWidgets</a>
  &#8226;   <a href="#bibtexparser">bibtexparser</a>
  &#8226;   <a href="#os">os</a>
+ &#8226;   <a href="#re">re</a>
 
   </div>
   <div class="import">
@@ -299,7 +305,7 @@ imported by:
 
 <div class="node">
   <a name="PaperManagementApp"></a>
-  <a target="code" href="///C:/Users/Kim/Desktop/Paper_Management_System/src/Paper_Management_System/PaperManagementApp.py" type="text/plain"><tt>PaperManagementApp</tt></a>
+  <a target="code" href="///D:/Research/Paper%20Management%20System/src/Paper_Management_System/PaperManagementApp.py" type="text/plain"><tt>PaperManagementApp</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
     <a href="#AddPaperDialog">AddPaperDialog</a>
@@ -308,6 +314,9 @@ imports:
  &#8226;   <a href="#PyQt5.QtGui">PyQt5.QtGui</a>
  &#8226;   <a href="#PyQt5.QtWidgets">PyQt5.QtWidgets</a>
  &#8226;   <a href="#csv">csv</a>
+ &#8226;   <a href="#datetime">datetime</a>
+ &#8226;   <a href="#os">os</a>
+ &#8226;   <a href="#shutil">shutil</a>
 
   </div>
   <div class="import">
@@ -349,7 +358,9 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#PaperManagementApp">PaperManagementApp</a>
+    <a href="#AddPaperDialog">AddPaperDialog</a>
+ &#8226;   <a href="#PaperInfoDialog">PaperInfoDialog</a>
+ &#8226;   <a href="#PaperManagementApp">PaperManagementApp</a>
  &#8226;   <a href="#PyQt5.QtGui">PyQt5.QtGui</a>
  &#8226;   <a href="#PyQt5.QtWidgets">PyQt5.QtWidgets</a>
 
@@ -367,7 +378,9 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#PaperManagementApp">PaperManagementApp</a>
+    <a href="#AddPaperDialog">AddPaperDialog</a>
+ &#8226;   <a href="#PaperInfoDialog">PaperInfoDialog</a>
+ &#8226;   <a href="#PaperManagementApp">PaperManagementApp</a>
  &#8226;   <a href="#PyQt5.QtWidgets">PyQt5.QtWidgets</a>
 
   </div>
@@ -1995,7 +2008,8 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#_strptime">_strptime</a>
+    <a href="#PaperManagementApp">PaperManagementApp</a>
+ &#8226;   <a href="#_strptime">_strptime</a>
  &#8226;   <a href="#calendar">calendar</a>
  &#8226;   <a href="#email.utils">email.utils</a>
  &#8226;   <a href="#http.server">http.server</a>
@@ -6108,6 +6122,7 @@ imports:
 imported by:
     <a href="#AddPaperDialog">AddPaperDialog</a>
  &#8226;   <a href="#PaperInfoDialog">PaperInfoDialog</a>
+ &#8226;   <a href="#PaperManagementApp">PaperManagementApp</a>
  &#8226;   <a href="#PyQt5">PyQt5</a>
  &#8226;   <a href="#_pyi_rth_utils">_pyi_rth_utils</a>
  &#8226;   <a href="#_pyi_rth_utils.qt">_pyi_rth_utils.qt</a>
@@ -6884,7 +6899,9 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#_sre">_sre</a>
+    <a href="#AddPaperDialog">AddPaperDialog</a>
+ &#8226;   <a href="#PaperInfoDialog">PaperInfoDialog</a>
+ &#8226;   <a href="#_sre">_sre</a>
  &#8226;   <a href="#_strptime">_strptime</a>
  &#8226;   <a href="#argparse">argparse</a>
  &#8226;   <a href="#base64">base64</a>
@@ -7086,7 +7103,8 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#argparse">argparse</a>
+    <a href="#PaperManagementApp">PaperManagementApp</a>
+ &#8226;   <a href="#argparse">argparse</a>
  &#8226;   <a href="#http.server">http.server</a>
  &#8226;   <a href="#tarfile">tarfile</a>
  &#8226;   <a href="#tempfile">tempfile</a>
